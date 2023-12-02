@@ -8,6 +8,6 @@ class HawaiianPizza extends FoodItem
 
     public function __construct()
     {
-        parent::__construct("ハワイアンピザ", "he chef William cooked a Pizza", 100);
+        parent::__construct("ハワイアンピザ", "he chef William cooked a Pizza", 400);
     }
 }

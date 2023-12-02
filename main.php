@@ -9,5 +9,27 @@ spl_autoload_register(function ($class) {
     }
 });
 
-$pizza = new \FoodItems\HawaiianPizza();
-echo $pizza->getName();
+$cheeseBurger = new \FoodItems\CheeseBurger();
+$fettuccine = new \FoodItems\Fettuccine();
+$hawaiianPizze = new \FoodItems\HawaiianPizza();
+$spaghetti = new \FoodItems\Spaghetti();
+
+$Inavah = new \Persons\Employees\Chef("Inayah Lozano", 40, "Osaka", 1, 30);
+$Nadia = new \Persons\Employees\Cashier("Nadia Valentine", 21, "Tokyo", 1, 20);
+
+$saizariya = new \Restaurants\Restaurant(
+    [
+        $cheeseBurger,
+        $fettuccine,
+        $hawaiianPizze,
+        $spaghetti
+    ],
+    [
+        $Inavah,
+        $Nadia
+    ]
+);
+
+$categories = ["ハンバーガー", "パスタ", "ピザ"];
+$resOrder = $saizariya->order($categories);
+// print_r($resOrder);

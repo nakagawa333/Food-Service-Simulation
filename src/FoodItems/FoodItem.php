@@ -11,6 +11,8 @@ abstract class FoodItem
     //価格
     private int $price;
 
+    const CATEGORY = self::CATEGORY;
+
     public function __construct(string $name, string $description, string $price)
     {
         $this->name = $name;
@@ -32,5 +34,10 @@ abstract class FoodItem
     public function getPrice(): int
     {
         return $this->price;
+    }
+
+    static public function getCategory(): string
+    {
+        return static::CATEGORY;
     }
 }
