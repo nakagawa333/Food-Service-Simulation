@@ -1,26 +1,39 @@
 <?php
 
-namespace Customers;
+namespace Persons\Customers;
 
 use \Persons\Person;
 
 class Customer extends Person
 {
-    public function __construct(string $name, string $age, string $address)
+    private $tastesMap;
+
+    public function __construct(string $name, string $age, string $address, $tastesMap)
     {
         parent::__construct($name, $age, $address);
+        $this->tastesMap = $tastesMap;
     }
 
-    public function interestedCategories($restaurants)
+    /*
+     * ユーザーが興味のあるカテゴリーを取得する
+     * @param $restaurant レストランクラス
+     */
+    public function interestedCategories($restaurant)
     {
-        $categories = array_map(function ($restaurant) {
-            return $restaurant * 2;
-        }, $restaurants);
+        $categories = [];
+        $menus = $restaurant->getMenu();
+        foreach ($menus as $menu) {
+            array_push($categories, $menu->getCategory());
+        }
 
-        return $categories;
+        $categoriesMap = array_flip($categories);
+        $interestedCategories = array_intersect_key($this->tastesMap, $categoriesMap);
+        return $interestedCategories;
     }
 
-    public function order(array $restaurants, array $categories)
+    public function order($restaurant)
     {
+        $interestedCategories = $this->interestedCategories($restaurant);
+        //print_r($interestedCategories);
     }
 }

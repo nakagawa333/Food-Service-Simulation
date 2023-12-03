@@ -30,6 +30,15 @@ $saizariya = new \Restaurants\Restaurant(
     ]
 );
 
-$categories = ["ハンバーガー", "パスタ", "ピザ"];
-$resOrder = $saizariya->order($categories);
+$interestedTastesMap = [
+    "Margherita" => 1,
+    "CheeseBurger" => 2,
+    "Spaghetti" => 1
+];
+
+$Tom = new \Persons\Customers\Customer("Tom", 20, "Saitama", $interestedTastesMap);
+$invoice = $Tom->order($saizariya);
+
+// $categories = ["ハンバーガー", "パスタ", "ピザ"];
+// $resOrder = $saizariya->order($categories);
 // print_r($resOrder);

@@ -4,7 +4,7 @@ namespace FoodItems;
 
 class HawaiianPizza extends FoodItem
 {
-    const CATEGORY = "ピザ";
+    const CATEGORY = "HawaiianPizza";
 
     public function __construct()
     {

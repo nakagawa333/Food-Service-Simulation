@@ -3,6 +3,8 @@
 namespace Restaurants;
 
 use Exception;
+use Persons\Employees\Cashier;
+use Persons\Employees\Chef;
 
 class Restaurant
 {
@@ -31,32 +33,7 @@ class Restaurant
      */
     public function order(array $categories)
     {
-        $orders = array();
-
         $menu = $this->getMenu();
-
-        $menuCategorys = array();
-        foreach ($menu as $item) {
-            $category = $item->getCategory();
-            if (array_key_exists($category, $menuCategorys)) {
-                $menuCategory = $menuCategorys[$category];
-                array_push($category, $menuCategory);
-                $menuCategorys[$category] = $menuCategory;
-            } else {
-                $menuCategorys[$category] = [$item];
-            }
-        }
-
-        foreach ($categories as $category) {
-            if (array_key_exists($category, $menuCategorys)) {
-                $menuCategory = $menuCategorys[$category];
-                foreach ($menuCategory as $menu) {
-                    array_push($orders, $menu);
-                }
-            }
-        }
-
-        $foodOrder = new \FoodOrder\FoodOrder($orders, time());
 
         //レジ
         $cashier = $this->getCashier($this->employees);
@@ -64,7 +41,10 @@ class Restaurant
         if ($cashier === null) {
             throw new Exception("レジの方が存在しません");
         }
+        //オーダー
+        $orders = $cashier->generateOrder($categories, $menu);
 
+        //請求書
         $invoice = $cashier->genrateInvoice($cashier);
 
         //シェフ
@@ -74,7 +54,7 @@ class Restaurant
             throw new Exception("シェフの方が存在しません");
         }
 
-        return $orders;
+        return $invoice;
     }
 
     /**
@@ -83,16 +63,12 @@ class Restaurant
      * @return レジ係
      */
 
-    public function getCashier($employees)
+    private function getCashier($employees)
     {
         foreach ($employees as $employ) {
-            //クラス名
-            $className = get_class($employ);
-
-            //クラス名がレジ係
-            if (strcmp($className, "Persons\Employees\ChefPersons\Employees\Cashier")) {
+            if ($employ instanceof Cashier) {
                 return $employ;
-            };
+            }
         }
 
         return null;
@@ -103,16 +79,13 @@ class Restaurant
      * @param $employees 雇用者リスト
      * @return シェフ
      */
-    public function getChef($employees)
+    private function getChef($employees)
     {
         foreach ($employees as $employ) {
-            $className = get_class($employ);
-            //クラス名がシェフ係
-            if (strcmp($className, "Persons\Employees\ChefPersons\Employees\Chef")) {
+            if ($employ instanceof Chef) {
                 return $employ;
-            };
+            }
         }
-
         return null;
     }
 }

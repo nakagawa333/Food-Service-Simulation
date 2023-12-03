@@ -9,11 +9,7 @@ class Chef extends Employee
         parent::__construct("チーフ", 25, "東京都", "test1", 5.25);
     }
 
-    /**
-     * 請求書を作成する
-     * @param $order オーダー
-     */
-    public function genrateInvoice($order)
+    public function prepareFood($foodOrder)
     {
     }
 }
