@@ -38,7 +38,6 @@ $interestedTastesMap = [
 
 $Tom = new \Persons\Customers\Customer("Tom", 20, "Saitama", $interestedTastesMap);
 $invoice = $Tom->order($saizariya);
-
+$invoice->printInvoice();
 // $categories = ["ハンバーガー", "パスタ", "ピザ"];
 // $resOrder = $saizariya->order($categories);
-// print_r($resOrder);

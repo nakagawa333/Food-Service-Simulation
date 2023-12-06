@@ -33,7 +33,7 @@ class Restaurant
      */
     public function order(array $categories)
     {
-        $menu = $this->getMenu();
+        $menu = $this->menu;
 
         //レジ
         $cashier = $this->getCashier($this->employees);
@@ -41,18 +41,20 @@ class Restaurant
         if ($cashier === null) {
             throw new Exception("レジの方が存在しません");
         }
+
         //オーダー
         $orders = $cashier->generateOrder($categories, $menu);
 
-        //請求書
-        $invoice = $cashier->genrateInvoice($cashier);
-
         //シェフ
         $chef = $this->getChef($this->employees);
+        $chef->prepareFood($orders);
 
         if ($chef === null) {
             throw new Exception("シェフの方が存在しません");
         }
+
+        // //請求書
+        $invoice = $cashier->genrateInvoice($orders);
 
         return $invoice;
     }

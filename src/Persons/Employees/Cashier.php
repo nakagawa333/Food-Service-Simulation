@@ -6,9 +6,11 @@ use \Invoice\Invoice;
 
 class Cashier extends Employee
 {
-    public function __construct()
+    private string $name;
+    public function __construct(string $name, string $age, string $address, string $employeeId, int $salary)
     {
-        parent::__construct("レジ", 20, "東京都", "test2", 9.25);
+        $this->name = $name;
+        parent::__construct($name, $age, $address, $employeeId, $salary);
     }
 
     /**
@@ -19,9 +21,12 @@ class Cashier extends Employee
     {
         $finalPrice = 0;
         $orderTime = $orders->getOrderTime();
-        foreach ($orders as $order) {
-            $finalPrice += $order->getPrice();
+        $items = $orders->getItems();
+        foreach ($items as $item) {
+            $finalPrice += $item->getPrice();
         }
+
+        printf("%s madethe invoice \n", $this->name);
 
         $invoice = new Invoice($finalPrice, $orderTime);
         return $invoice;
@@ -33,29 +38,30 @@ class Cashier extends Employee
      * @param $items メニュー
      * @return オーダー
      */
-    public static function generateOrder(array $categories, array $menu)
+    public function generateOrder(array $categories, array $menu)
     {
-        $menuCategorys = array();
-        foreach ($menu as $item) {
-            $category = $item->getCategory();
-            if (array_key_exists($category, $menuCategorys)) {
-                $menuCategory = $menuCategorys[$category];
-                array_push($category, $menuCategory);
-                $menuCategorys[$category] = $menuCategory;
-            } else {
-                $menuCategorys[$category] = [$item];
-            }
-        }
+        $menuMap = $this->createMenuMap($menu);
         $orders = array();
-        foreach ($categories as $category) {
-            if (array_key_exists($category, $menuCategorys)) {
-                $menuCategory = $menuCategorys[$category];
-                foreach ($menuCategory as $menu) {
-                    array_push($orders, $menu);
-                }
+
+        foreach ($categories as $key => $value) {
+            $subMenu = $menuMap[$key];
+            //注文の数だけループ
+            for ($i = 0; $i < $value; $i++) {
+                array_push($orders, $subMenu);
             }
         }
-        $foodOrder = new \FoodOrder\FoodOrder($orders, time());
+
+        printf("%s received the order. \n", $this->name);
+        $foodOrder = new \FoodOrder\FoodOrder($orders);
         return $foodOrder;
+    }
+
+    public function createMenuMap($menu)
+    {
+        $menuMap = array();
+        foreach ($menu as $item) {
+            $menuMap[$item->getCategory()] = $item;
+        }
+        return $menuMap;
     }
 }

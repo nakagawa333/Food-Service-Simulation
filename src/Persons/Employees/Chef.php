@@ -2,14 +2,24 @@
 
 namespace Persons\Employees;
 
+use FoodOrder\FoodOrder;
+
 class Chef extends Employee
 {
-    public function __construct()
+    private string $name;
+    public function __construct(string $name, string $age, string $address, string $employeeId, int $salary)
     {
-        parent::__construct("チーフ", 25, "東京都", "test1", 5.25);
+        $this->name = $name;
+        parent::__construct($name, $age, $address, $employeeId, $salary);
     }
 
-    public function prepareFood($foodOrder)
+
+    public function prepareFood(FoodOrder $foodOrder)
     {
+        $totalTime = 0;
+        $items = $foodOrder->getItems();
+        foreach ($items as $item) {
+            echo "{$this->name} was cooking {$item->getCategory()}.\n";
+        }
     }
 }
